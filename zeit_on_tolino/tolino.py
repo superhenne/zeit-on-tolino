@@ -13,7 +13,8 @@ from zeit_on_tolino.env_vars import EnvVars, MissingEnvironmentVariable
 from zeit_on_tolino.tolino_partner import PartnerDetails
 from zeit_on_tolino.web import Delay
 
-TOLINO_CLOUD_LOGIN_URL = "https://webreader.mytolino.com/"
+#TOLINO_CLOUD_LOGIN_URL = "https://webreader.mytolino.com/"
+TOLINO_CLOUD_LOGIN_URL = "https://webreader.mytolino.com/library/index.html#/mybooks/titles"
 TOLINO_COUNTRY_TO_SELECT = "Deutschland"  # TODO make country a partner shop detail depending on selected partner shop
 
 BUTTON_PLEASE_SELECT_YOUR_COUNTRY = "Bitte wähle Dein Land aus"
@@ -108,7 +109,7 @@ def upload_e_paper(webdriver: WebDriver, file_path: Path, e_paper_title: str) ->
     WebDriverWait(webdriver, Delay.small).until(EC.element_to_be_clickable((By.CSS_SELECTOR, my_books_button_css)))
     my_books_button = webdriver.find_element(By.CSS_SELECTOR, my_books_button_css)
     time.sleep(Delay.small)
-    my_books_button.click()
+    #my_books_button.click()
 
     menu_css = 'svg[data-test-id="library-headerBar-overflowMenu-button"]'
     WebDriverWait(webdriver, Delay.medium).until(EC.presence_of_element_located((By.CSS_SELECTOR, menu_css)))
