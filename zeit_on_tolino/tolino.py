@@ -106,9 +106,9 @@ def upload_e_paper(webdriver: WebDriver, file_path: Path, e_paper_title: str) ->
     popup_button_css = 'div[data-test-id="dialogButton-0"]'
     WebDriverWait(webdriver, Delay.small).until(EC.presence_of_element_located((By.CSS_SELECTOR, popup_button_css)))
     WebDriverWait(webdriver, Delay.small).until(EC.element_to_be_clickable((By.CSS_SELECTOR, popup_button_css)))
-    popup_button_css = webdriver.find_element(By.CSS_SELECTOR, popup_button_css)
+    popup_button = webdriver.find_element(By.CSS_SELECTOR, popup_button_css)
     time.sleep(Delay.small)
-    popup_button_css.click()
+    popup_button.click()
 
     # click on 'my books'
     my_books_button_css = 'span[data-test-id="library-drawer-MyBooks"]'
