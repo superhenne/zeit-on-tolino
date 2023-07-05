@@ -65,28 +65,33 @@ def _login(webdriver: WebDriver) -> None:
 
     # select partner shop
     time.sleep(Delay.small)
+    log.info("select partner shop start")
     WebDriverWait(webdriver, Delay.large).until(
         EC.presence_of_element_located((By.CSS_SELECTOR, 'div[data-test-id="ftu-resellerSelection-resellerList"]'))
     )
     for div in webdriver.find_elements(By.TAG_NAME, "div"):
         if shop.shop_image_keyword in div.get_attribute("style"):
             div.click()
+            log.info("select partner shop selected")
             break
     else:
         raise RuntimeError(f"Could not select desired partner shop '{shop.shop_image_keyword}'.")
 
     # click on login button
+    log.info("login button start")
     WebDriverWait(webdriver, Delay.medium).until(
         EC.presence_of_element_located((By.CSS_SELECTOR, 'div[data-test-id="library-selection-headerBar"]'))
     )
     for span in webdriver.find_elements(By.TAG_NAME, "span"):
         if span.text == BUTTON_LOGIN:
             span.click()
+            log.info("BUTTON LOGIN clicked")
             break
     else:
         raise RuntimeError("Could not find login button.")
 
     # login with partner shop credentials
+    log.info("login with credentials")
     WebDriverWait(webdriver, Delay.medium).until(EC.presence_of_element_located((shop.user.by, shop.user.value)))
     username_field = webdriver.find_element(shop.user.by, shop.user.value)
 
@@ -96,6 +101,7 @@ def _login(webdriver: WebDriver) -> None:
 
     btn = webdriver.find_element(shop.login_button.by, shop.login_button.value)
     btn.click()
+    log.info("logged in successfully")
 
 
 def element_exists(webdriver: WebDriver, by: str, value: str) -> bool:
