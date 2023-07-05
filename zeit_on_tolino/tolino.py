@@ -136,7 +136,7 @@ def _upload(webdriver: WebDriver, file_path: Path, e_paper_title: str) -> None:
     time.sleep(Delay.small)
     my_books_button.click()
 
-    menu_css = 'svg[data-test-id="library-headerBar-overflowMenu-button"]'
+    menu_css = 'div[data-test-id="library-headerBar-overflowMenu-button"]'
     WebDriverWait(webdriver, Delay.medium).until(EC.presence_of_element_located((By.CSS_SELECTOR, menu_css)))
     if e_paper_title in webdriver.page_source:
         log.info(f"The title '{e_paper_title}' is already present in tolino cloud. Skipping upload.")
