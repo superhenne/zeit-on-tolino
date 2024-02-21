@@ -13,8 +13,6 @@ from zeit_on_tolino.env_vars import EnvVars, MissingEnvironmentVariable
 from zeit_on_tolino.web import Delay
 
 ZEIT_LOGIN_URL = "https://premium.zeit.de/"
-#https://premium.zeit.de/
-#https://meine.zeit.de/anmelden
 ZEIT_DATE_FORMAT = "%d.%m.%Y"
 
 BUTTON_TEXT_TO_RECENT_EDITION = "ZUR AKTUELLEN AUSGABE"
@@ -46,8 +44,6 @@ def _login(webdriver: WebDriver) -> None:
 
     WebDriverWait(webdriver, Delay.medium).until(EC.presence_of_element_located((By.CLASS_NAME, "navigation-link--login")))
     btn = webdriver.find_element(By.CLASS_NAME, "navigation-link--login")
-    #navigation-link--login
-    #nav__login-link
     btn.click()
     assert "anmelden" in webdriver.current_url, webdriver.current_url
 
