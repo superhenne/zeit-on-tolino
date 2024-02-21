@@ -43,8 +43,6 @@ def _login(webdriver: WebDriver) -> None:
     WebDriverWait(webdriver, Delay.medium).until(EC.presence_of_element_located((By.CLASS_NAME, "navigation__button--account")))
     btn = webdriver.find_element(By.CLASS_NAME, "navigation__button--account")
     btn.click()
-    log.info("icon clicked")
-
 
     WebDriverWait(webdriver, Delay.medium).until(EC.presence_of_element_located((By.CLASS_NAME, "navigation-link--login")))
     btn = webdriver.find_element(By.CLASS_NAME, "navigation-link--login")
