@@ -40,14 +40,14 @@ def _login(webdriver: WebDriver) -> None:
     webdriver.get(ZEIT_LOGIN_URL)
 
     # find and click login button
-    WebDriverWait(webdriver, Delay.medium).until(EC.presence_of_element_located((By.CLASS_NAME, "navigation__button navigation__button--account")))
-    btn = webdriver.find_element(By.CLASS_NAME, "navigation__button navigation__button--account")
-    btn.click()
+    #WebDriverWait(webdriver, Delay.medium).until(EC.presence_of_element_located((By.CLASS_NAME, "navigation__button navigation__button--account")))
+    #btn = webdriver.find_element(By.CLASS_NAME, "navigation__button navigation__button--account")
+    #btn.click()
 
 
 
-    WebDriverWait(webdriver, Delay.medium).until(EC.presence_of_element_located((By.CLASS_NAME, "btn btn--fullwidth.navigation-link--login")))
-    btn = webdriver.find_element(By.CLASS_NAME, "btn btn--fullwidth.navigation-link--login")
+    WebDriverWait(webdriver, Delay.medium).until(EC.presence_of_element_located((By.CLASS_NAME, "navigation-link--login")))
+    btn = webdriver.find_element(By.CLASS_NAME, "navigation-link--login")
     #navigation-link--login
     #nav__login-link
     btn.click()
