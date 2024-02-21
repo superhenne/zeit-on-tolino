@@ -39,12 +39,12 @@ def _login(webdriver: WebDriver) -> None:
     username, password = _get_credentials()
     webdriver.get(ZEIT_LOGIN_URL)
 
-    #WebDriverWait(webdriver, Delay.medium).until(EC.presence_of_element_located((By.CLASS_NAME, "navigation-link--login")))
-    #btn = webdriver.find_element(By.CLASS_NAME, "submit-button.log")
+    WebDriverWait(webdriver, Delay.medium).until(EC.presence_of_element_located((By.CLASS_NAME, "submit-button.log")))
+    btn = webdriver.find_element(By.CLASS_NAME, "submit-button.log")
     #navigation-link--login
     #nav__login-link
     #btn.click()
-    assert "anmelden" in webdriver.current_url, webdriver.current_url
+    #assert "anmelden" in webdriver.current_url, webdriver.current_url
 
     username_field = webdriver.find_element(By.ID, "login_email")
     username_field.send_keys(username)
