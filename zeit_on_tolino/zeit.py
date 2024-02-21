@@ -12,7 +12,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from zeit_on_tolino.env_vars import EnvVars, MissingEnvironmentVariable
 from zeit_on_tolino.web import Delay
 
-ZEIT_LOGIN_URL = "https://meine.zeit.de/anmelden"
+ZEIT_LOGIN_URL = "https://premium.zeit.de/"
 #https://premium.zeit.de/
 #https://meine.zeit.de/anmelden
 ZEIT_DATE_FORMAT = "%d.%m.%Y"
@@ -39,12 +39,19 @@ def _login(webdriver: WebDriver) -> None:
     username, password = _get_credentials()
     webdriver.get(ZEIT_LOGIN_URL)
 
-    WebDriverWait(webdriver, Delay.medium).until(EC.presence_of_element_located((By.CLASS_NAME, "submit-button.log")))
-    btn = webdriver.find_element(By.CLASS_NAME, "submit-button.log")
+    # find and click login button
+    WebDriverWait(webdriver, Delay.medium).until(EC.presence_of_element_located((By.CLASS_NAME, "navigation__button navigation__button--account")))
+    btn = webdriver.find_element(By.CLASS_NAME, "navigation__button navigation__button--account")
+    btn.click()
+
+
+
+    WebDriverWait(webdriver, Delay.medium).until(EC.presence_of_element_located((By.CLASS_NAME, "btn btn--fullwidth.navigation-link--login")))
+    btn = webdriver.find_element(By.CLASS_NAME, "btn btn--fullwidth.navigation-link--login")
     #navigation-link--login
     #nav__login-link
-    #btn.click()
-    #assert "anmelden" in webdriver.current_url, webdriver.current_url
+    btn.click()
+    assert "anmelden" in webdriver.current_url, webdriver.current_url
 
     username_field = webdriver.find_element(By.ID, "login_email")
     username_field.send_keys(username)
