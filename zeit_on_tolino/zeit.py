@@ -37,8 +37,10 @@ def _login(webdriver: WebDriver) -> None:
     username, password = _get_credentials()
     webdriver.get(ZEIT_LOGIN_URL)
 
-    WebDriverWait(webdriver, Delay.medium).until(EC.presence_of_element_located((By.CLASS_NAME, "nav__login-link")))
-    btn = webdriver.find_element(By.CLASS_NAME, "nav__login-link")
+    WebDriverWait(webdriver, Delay.medium).until(EC.presence_of_element_located((By.CLASS_NAME, "navigation-link--login")))
+    btn = webdriver.find_element(By.CLASS_NAME, "navigation-link--login")
+    #navigation-link--login
+    #nav__login-link
     btn.click()
     assert "anmelden" in webdriver.current_url, webdriver.current_url
 
