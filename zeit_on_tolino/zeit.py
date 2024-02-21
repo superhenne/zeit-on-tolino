@@ -39,8 +39,8 @@ def _login(webdriver: WebDriver) -> None:
     username, password = _get_credentials()
     webdriver.get(ZEIT_LOGIN_URL)
 
-    WebDriverWait(webdriver, Delay.medium).until(EC.presence_of_element_located((By.CLASS_NAME, "navigation-link--login")))
-    btn = webdriver.find_element(By.CLASS_NAME, "submit-button.log")
+    #WebDriverWait(webdriver, Delay.medium).until(EC.presence_of_element_located((By.CLASS_NAME, "navigation-link--login")))
+    #btn = webdriver.find_element(By.CLASS_NAME, "submit-button.log")
     #navigation-link--login
     #nav__login-link
     #btn.click()
