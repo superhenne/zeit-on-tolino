@@ -148,7 +148,7 @@ def _upload(webdriver: WebDriver, file_path: Path, e_paper_title: str) -> None:
 
     # upload file
     WebDriverWait(webdriver, Delay.small).until(
-        EC.presence_of_element_located((By.CSS_SELECTOR, 'div[data-test-id="library-headerBar-popup-menu"]'))
+        EC.presence_of_element_located((By.CSS_SELECTOR, 'div[data-test-id="library-headerBar-menu-item-upload"]'))
     )
     upload = webdriver.find_element(By.XPATH, "//input[@type='file']")
     upload.send_keys(str(file_path))
