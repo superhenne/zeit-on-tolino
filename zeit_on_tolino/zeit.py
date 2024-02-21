@@ -12,7 +12,9 @@ from selenium.webdriver.support.ui import WebDriverWait
 from zeit_on_tolino.env_vars import EnvVars, MissingEnvironmentVariable
 from zeit_on_tolino.web import Delay
 
-ZEIT_LOGIN_URL = "https://premium.zeit.de/"
+ZEIT_LOGIN_URL = "https://meine.zeit.de/anmelden"
+#https://premium.zeit.de/
+#https://meine.zeit.de/anmelden
 ZEIT_DATE_FORMAT = "%d.%m.%Y"
 
 BUTTON_TEXT_TO_RECENT_EDITION = "ZUR AKTUELLEN AUSGABE"
