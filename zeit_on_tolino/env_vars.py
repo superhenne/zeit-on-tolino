@@ -5,13 +5,13 @@ from zeit_on_tolino.tolino_partner import PartnerDetails
 
 class EnvVars:
     # tolino env vars
-    TOLINO_USER: str = "superhenne@gmail.com"
-    TOLINO_PASSWORD: str = "mutfoq-revkA2-tohtof"
-    TOLINO_PARTNER_SHOP: str = "thalia"
+    TOLINO_USER: str = "TOLINO_USER"
+    TOLINO_PASSWORD: str = "TOLINO_PASSWORD"
+    TOLINO_PARTNER_SHOP: str = "TOLINO_PARTNER_SHOP"
 
     # zeit env vars
-    ZEIT_PREMIUM_USER: str = "superhenne@gmail.com"
-    ZEIT_PREMIUM_PASSWORD: str = "oYV*8jDP"
+    ZEIT_PREMIUM_USER: str = "ZEIT_PREMIUM_USER"
+    ZEIT_PREMIUM_PASSWORD: str = "ZEIT_PREMIUM_PASSWORD"
 
 
 class MissingEnvironmentVariable(Exception):

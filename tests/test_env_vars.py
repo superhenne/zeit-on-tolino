@@ -5,10 +5,10 @@ from zeit_on_tolino import env_vars
 
 def _set_all_env_vars(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv(env_vars.EnvVars.TOLINO_PARTNER_SHOP, "thalia")
-    monkeypatch.setenv(env_vars.EnvVars.TOLINO_USER, "foo")
-    monkeypatch.setenv(env_vars.EnvVars.TOLINO_PASSWORD, "baa")
-    monkeypatch.setenv(env_vars.EnvVars.ZEIT_PREMIUM_USER, "baz")
-    monkeypatch.setenv(env_vars.EnvVars.ZEIT_PREMIUM_PASSWORD, "zap")
+    monkeypatch.setenv(env_vars.EnvVars.TOLINO_USER, "superhenne@gmail.com")
+    monkeypatch.setenv(env_vars.EnvVars.TOLINO_PASSWORD, "mutfoq-revkA2-tohtof")
+    monkeypatch.setenv(env_vars.EnvVars.ZEIT_PREMIUM_USER, "superhenne@gmail.com")
+    monkeypatch.setenv(env_vars.EnvVars.ZEIT_PREMIUM_PASSWORD, "oYV*8jDP")
 
 
 def test_verify_env_vars_are_set__success(monkeypatch: pytest.MonkeyPatch) -> None:
