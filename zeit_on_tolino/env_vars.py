@@ -7,7 +7,7 @@ class EnvVars:
     # tolino env vars
     TOLINO_USER: str = "TOLINO_USER"
     TOLINO_PASSWORD: str = "TOLINO_PASSWORD"
-    TOLINO_PARTNER_SHOP: str = "thalia"
+    TOLINO_PARTNER_SHOP: str = "TOLINO_PARTNER_SHOP"
 
     # zeit env vars
     ZEIT_PREMIUM_USER: str = "ZEIT_PREMIUM_USER"
