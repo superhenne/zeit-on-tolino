@@ -21,7 +21,7 @@ def get_webdriver(download_path: Union[Path, str] = DOWNLOAD_PATH) -> WebDriver:
     options = ChromeOptions()
     prefs = {"download.default_directory" : f"{download_path}/"}
     options.add_experimental_option("prefs",prefs)
-    options.add_argument("--headless")
+    #options.add_argument("--headless")
     webdriver = Chrome(options=options)
     setattr(webdriver, "download_dir_path", str(download_path))
     return webdriver
