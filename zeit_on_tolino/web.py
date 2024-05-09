@@ -6,8 +6,9 @@ from typing import Union
 from selenium.webdriver import Chrome, ChromeOptions
 from selenium.webdriver.firefox.webdriver import WebDriver
 
-DOWNLOAD_PATH = tempfile.TemporaryDirectory().name
-
+#DOWNLOAD_PATH = tempfile.TemporaryDirectory().name
+# henne
+DOWNLOAD_PATH = '/Users/hendrikkoch/Downloads'
 
 @dataclass
 class Delay:
