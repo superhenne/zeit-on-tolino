@@ -35,7 +35,7 @@ jobs:
       uses: snok/install-poetry@v1
 
     - name: Install dependencies
-      run: poetry install --no-interaction --no-dev
+      run: poetry install --no-interaction
 
     - name: Run Zeit-on-Tolino Script
       env:
