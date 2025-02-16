@@ -1,6 +1,8 @@
 name: Periodic Sync
 
 on:
+  repository_dispatch:
+    types: [email-trigger]
   schedule:
       # Runs multiple times on Wednesday at *6 to avoid high load on github actions at the full hour.
       # Rational for running multiple times is to catch the new release as early as possible. Note,
