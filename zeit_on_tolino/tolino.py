@@ -52,12 +52,23 @@ def _login(webdriver: WebDriver) -> None:
         time.sleep(random.uniform(1, 3))
 
     def move_mouse_randomly(element):
-        action = ActionChains(webdriver)
-        # Move to random position first, then to element
-        action.move_by_offset(random.randint(-100, 100), random.randint(-100, 100))
-        action.move_to_element(element)
-        action.perform()
-    
+        try:
+            action = ActionChains(element._parent)
+            # Get element size and location
+            size = element.size
+            location = element.location
+            
+            # Calculate a point within the element's bounds
+            x = location['x'] + size['width'] / 2
+            y = location['y'] + size['height'] / 2
+            
+            # Move to the center of the element instead of random position
+            action.move_to_element(element)
+            action.perform()
+        except Exception as e:
+            log.warning(f"Mouse movement failed: {e}. Continuing without mouse movement.")
+            # Continue without mouse movement if it fails
+
     webdriver.get(TOLINO_CLOUD_LOGIN_URL)
     random_sleep()
 
@@ -93,6 +104,10 @@ def _login(webdriver: WebDriver) -> None:
     )
     for div in webdriver.find_elements(By.TAG_NAME, "div"):
         if shop.shop_image_keyword in div.get_attribute("style"):
+            try:
+                move_mouse_randomly(div)
+            except Exception as e:
+                log.warning(f"Mouse movement skipped: {e}")
             div.click()
             break
     else:
