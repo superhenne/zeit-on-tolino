@@ -196,7 +196,7 @@ def _upload(webdriver: WebDriver, file_path: Path, e_paper_title: str) -> None:
 
     # wait for upload status field to appear
     log.info("waiting for upload status bar to appear...")
-    WebDriverWait(webdriver, Delay.medium).until(EC.presence_of_element_located((By.CLASS_NAME, "_ymr9b9")))
+    WebDriverWait(webdriver, Delay.medium).until(EC.presence_of_element_located((By.CLASS_NAME, "_sep8tp")))
     log.info("upload status bar appeared.")
     # wait for upload status field to disappear
     log.info("waiting for upload status bar to disappear...")
