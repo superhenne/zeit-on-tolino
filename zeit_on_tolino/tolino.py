@@ -212,6 +212,13 @@ def _upload(webdriver: WebDriver, file_path: Path, e_paper_title: str) -> None:
     )
     assert e_paper_title in webdriver.page_source, f"Title '{e_paper_title}' not found in page source!"
     log.info(f"book title '{e_paper_title}' is present.")
+    
+    # Take final screenshot after successful upload
+    screenshots_dir = Path(os.getenv('GITHUB_WORKSPACE', '.')) / "screenshots"
+    screenshot_path = screenshots_dir / "upload_success.png"
+    webdriver.save_screenshot(str(screenshot_path))
+    log.info(f"Saved post-upload screenshot to {screenshot_path}")
+    
     log.info("successfully uploaded ZEIT e-paper to tolino cloud.")
 
 
