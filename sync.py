@@ -1,6 +1,7 @@
 import logging
 from zeit_on_tolino import env_vars, epub, tolino, web, zeit
 import undetected_chromedriver as uc
+from pathlib import Path
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -19,6 +20,16 @@ def setup_webdriver():
     # Add language preferences
     options.add_argument('--lang=de-DE')
     
+    # Set download directory
+    download_path = Path("downloads")
+    download_path.mkdir(exist_ok=True)
+    prefs = {
+        "download.default_directory": str(download_path.absolute()),
+        "download.prompt_for_download": False,
+        "download.directory_upgrade": True,
+    }
+    options.add_experimental_option("prefs", prefs)
+    
     driver = uc.Chrome(options=options)
     
     # Set common headers
@@ -27,6 +38,9 @@ def setup_webdriver():
         "platform": "Windows",
         "acceptLanguage": "de-DE"
     })
+    
+    # Add download_dir_path attribute
+    setattr(driver, "download_dir_path", str(download_path.absolute()))
     
     return driver
 
