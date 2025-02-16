@@ -35,6 +35,7 @@ jobs:
 
     - name: Install dependencies
       run: |
+        poetry lock --no-update
         poetry install --no-interaction
         poetry run pip install undetected-chromedriver
 
