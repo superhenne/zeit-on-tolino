@@ -34,16 +34,13 @@ jobs:
       uses: snok/install-poetry@v1
 
     - name: Install dependencies
-      run: |
-        rm -f poetry.lock
-        poetry lock
-        poetry install --no-interaction
-        poetry run pip install undetected-chromedriver
+      run: poetry install --no-interaction
 
     - name: Install Chrome
       run: |
         wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-        sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/sources.list.d/google.list'
+        sudo mkdir -p /etc/apt/sources.list.d
+        sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
         sudo apt-get update
         sudo apt-get install google-chrome-stable
 
