@@ -34,7 +34,10 @@ jobs:
       uses: snok/install-poetry@v1
 
     - name: Install dependencies
-      run: poetry install --no-interaction
+      run: |
+        poetry lock
+        poetry install --no-interaction
+        poetry run pip install undetected-chromedriver
 
     - name: Install Chrome
       run: |
