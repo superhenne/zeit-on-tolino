@@ -1,4 +1,3 @@
-
 name: Periodic Sync
 
 on:
@@ -45,3 +44,11 @@ jobs:
         TOLINO_PASSWORD: ${{ secrets.TOLINO_PASSWORD }}
         TOLINO_PARTNER_SHOP: ${{ secrets.TOLINO_PARTNER_SHOP }}
       run: poetry run python sync.py
+
+    - name: Upload screenshot
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: screenshots
+        path: screenshots/
+        retention-days: 5

@@ -1,0 +1,7 @@
+- name: Upload screenshot
+  uses: actions/upload-artifact@v4
+  if: always()  # This ensures the screenshot is uploaded even if the action fails
+  with:
+    name: screenshots
+    path: screenshots/
+    retention-days: 5 
