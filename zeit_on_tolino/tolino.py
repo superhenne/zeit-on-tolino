@@ -95,6 +95,16 @@ def _login(webdriver: WebDriver) -> None:
     btn = webdriver.find_element(shop.login_button.by, shop.login_button.value)
     btn.click()
 
+    # Create screenshots directory in GitHub workspace
+    workspace = os.getenv('GITHUB_WORKSPACE', '.')
+    screenshots_dir = Path(workspace) / "screenshots"
+    screenshots_dir.mkdir(exist_ok=True)
+    
+    # Take screenshot after login
+    screenshot_path = screenshots_dir / "tolino_login.png"
+    webdriver.save_screenshot(str(screenshot_path))
+    log.info(f"Saved login screenshot to {screenshot_path}")
+
 
 def element_exists(webdriver: WebDriver, by: str, value: str) -> bool:
     try:
