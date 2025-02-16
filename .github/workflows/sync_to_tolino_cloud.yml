@@ -33,14 +33,22 @@ jobs:
     - name: Install Poetry
       uses: snok/install-poetry@v1
 
+    - name: Configure Poetry
+      run: |
+        poetry config virtualenvs.create true
+        poetry config virtualenvs.in-project true
+
     - name: Install dependencies
-      run: poetry install --no-interaction
+      run: |
+        rm -f poetry.lock
+        poetry init --no-interaction --name="zeit-on-tolino" --description="" --author="" --python="^3.10" --dependency="undetected-chromedriver"
+        poetry lock
+        poetry install --no-interaction
 
     - name: Install Chrome
       run: |
         wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-        sudo mkdir -p /etc/apt/sources.list.d
-        sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+        sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/sources.list.d/google.list'
         sudo apt-get update
         sudo apt-get install google-chrome-stable
 
