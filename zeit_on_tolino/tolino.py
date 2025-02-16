@@ -9,6 +9,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.action_chains import ActionChains
+import random
 
 from zeit_on_tolino.env_vars import EnvVars, MissingEnvironmentVariable
 from zeit_on_tolino.tolino_partner import PartnerDetails
@@ -44,21 +46,44 @@ def _login(webdriver: WebDriver) -> None:
 
     username, password, partner_shop = _get_credentials()
     shop = getattr(PartnerDetails, partner_shop.lower()).value
+    
+    # Add some randomization to appear more human-like
+    def random_sleep():
+        time.sleep(random.uniform(1, 3))
+
+    def move_mouse_randomly(element):
+        action = ActionChains(webdriver)
+        # Move to random position first, then to element
+        action.move_by_offset(random.randint(-100, 100), random.randint(-100, 100))
+        action.move_to_element(element)
+        action.perform()
+    
     webdriver.get(TOLINO_CLOUD_LOGIN_URL)
+    random_sleep()
 
     # select country
-    WebDriverWait(webdriver, Delay.medium).until(
+    country_selector = WebDriverWait(webdriver, Delay.medium).until(
         EC.presence_of_element_located((By.CSS_SELECTOR, 'div[data-test-id="ftu-countrySelection-countryList"]'))
     )
-    WebDriverWait(webdriver, Delay.medium).until(
+    
+    country_element = WebDriverWait(webdriver, Delay.medium).until(
         EC.presence_of_element_located((By.CSS_SELECTOR, 'div[data-test-id="ftu-country-de-DE"]'))
     )
-    time.sleep(Delay.small)
+    
+    random_sleep()
+    
     for div in webdriver.find_elements(By.TAG_NAME, "div"):
         if div.text == TOLINO_COUNTRY_TO_SELECT:
+            move_mouse_randomly(div)
+            random_sleep()
             div.click()
             break
     else:
+        # Take screenshot before raising error
+        screenshots_dir = Path(os.getenv('GITHUB_WORKSPACE', '.')) / "screenshots"
+        screenshots_dir.mkdir(exist_ok=True)
+        screenshot_path = screenshots_dir / "country_selection_error.png"
+        webdriver.save_screenshot(str(screenshot_path))
         raise RuntimeError(f"Could not select desired country '{TOLINO_COUNTRY_TO_SELECT}'.")
 
     # select partner shop

@@ -1,8 +1,34 @@
 import logging
 from zeit_on_tolino import env_vars, epub, tolino, web, zeit
+import undetected_chromedriver as uc
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
+
+def setup_webdriver():
+    options = uc.ChromeOptions()
+    options.add_argument('--no-sandbox')
+    options.add_argument('--headless')
+    options.add_argument('--disable-gpu')
+    options.add_argument('--window-size=1920,1080')
+    options.add_argument('--disable-dev-shm-usage')
+    
+    # Add realistic user agent
+    options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36')
+    
+    # Add language preferences
+    options.add_argument('--lang=de-DE')
+    
+    driver = uc.Chrome(options=options)
+    
+    # Set common headers
+    driver.execute_cdp_cmd('Network.setUserAgentOverride', {
+        "userAgent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        "platform": "Windows",
+        "acceptLanguage": "de-DE"
+    })
+    
+    return driver
 
 if __name__ == "__main__":
     try:
@@ -10,7 +36,7 @@ if __name__ == "__main__":
         env_vars.verify_configured_partner_shop_is_supported()
 
         log.info("logging into ZEIT premium...")
-        webdriver = web.get_webdriver()
+        webdriver = setup_webdriver()
         
         try:
             # download ZEIT
