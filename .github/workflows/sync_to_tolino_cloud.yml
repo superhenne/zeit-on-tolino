@@ -33,16 +33,10 @@ jobs:
     - name: Install Poetry
       uses: snok/install-poetry@v1
 
-    - name: Configure Poetry
-      run: |
-        poetry config virtualenvs.create true
-        poetry config virtualenvs.in-project true
-
     - name: Install dependencies
       run: |
         rm -f poetry.lock
-        poetry init --no-interaction --name="zeit-on-tolino" --description="" --author="" --python="^3.10" --dependency="undetected-chromedriver"
-        poetry lock
+        poetry add undetected-chromedriver
         poetry install --no-interaction
 
     - name: Install Chrome
