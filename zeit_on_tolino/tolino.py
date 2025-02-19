@@ -125,6 +125,8 @@ def _login(webdriver: WebDriver) -> None:
         raise RuntimeError("Could not find login button.")
 
     # login with partner shop credentials
+    log.info("Current page source: %s", webdriver.page_source)
+    webdriver.save_screenshot("screenshot_before_login.png")
     WebDriverWait(webdriver, Delay.medium).until(EC.presence_of_element_located((shop.user.by, shop.user.value)))
     username_field = webdriver.find_element(shop.user.by, shop.user.value)
 
