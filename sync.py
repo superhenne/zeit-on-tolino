@@ -30,7 +30,12 @@ def setup_webdriver():
     }
     options.add_experimental_option("prefs", prefs)
     
-    driver = uc.Chrome(options=options, allow_browser_download=True)
+    # Specify Chrome version
+    driver = uc.Chrome(
+        options=options, 
+        version_main=133,  # Match the installed Chrome version
+        allow_browser_download=True
+    )
     
     # Set common headers
     driver.execute_cdp_cmd('Network.setUserAgentOverride', {
