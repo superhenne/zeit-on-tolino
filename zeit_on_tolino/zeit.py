@@ -41,28 +41,67 @@ def _login(webdriver: WebDriver) -> None:
         log.info(f"ZEIT_PREMIUM_USER is {'set' if username else 'not set'}")
         log.info(f"ZEIT_PREMIUM_PASSWORD is {'set' if password else 'not set'}")
         
-        # Take screenshot before navigation
         screenshots_dir = Path(os.getenv('GITHUB_WORKSPACE', '.')) / "screenshots"
         screenshots_dir.mkdir(exist_ok=True)
         
         webdriver.get(ZEIT_LOGIN_URL)
-        time.sleep(Delay.small)
-
+        time.sleep(Delay.medium)
+        
+        # Take screenshot to check for Friendly Captcha
+        screenshot_path = screenshots_dir / "zeit_captcha_check.png"
+        webdriver.save_screenshot(str(screenshot_path))
+        log.info(f"Current URL: {webdriver.current_url}")
+        
+        # Wait for Friendly Captcha to complete
+        try:
+            WebDriverWait(webdriver, Delay.medium).until(
+                EC.presence_of_element_located((By.CLASS_NAME, "frc-captcha"))
+            )
+            log.info("Friendly Captcha widget found, waiting for completion...")
+            
+            # Wait for the captcha to be solved (when data-callback attribute appears)
+            WebDriverWait(webdriver, Delay.large).until(
+                lambda driver: driver.execute_script("""
+                    return document.querySelector('.frc-captcha').getAttribute('data-callback') !== null
+                """)
+            )
+            log.info("Friendly Captcha completed")
+        except Exception as e:
+            log.info(f"No Friendly Captcha found or already completed: {e}")
+        
+        # Now proceed with login
         username_field = webdriver.find_element(By.ID, "login_email")
-        username_field.send_keys(username)
         password_field = webdriver.find_element(By.ID, "login_pass")
-        password_field.send_keys(password)
-
+        
+        # Type slowly to appear more human-like
+        for char in username:
+            username_field.send_keys(char)
+            time.sleep(0.1)
+        time.sleep(0.5)
+        for char in password:
+            password_field.send_keys(char)
+            time.sleep(0.1)
+        
         btn = webdriver.find_element(By.CLASS_NAME, "submit-button.log")
         btn.click()
         time.sleep(Delay.medium)
 
+        # Take screenshot after login attempt
+        screenshot_path = screenshots_dir / "zeit_after_login.png"
+        webdriver.save_screenshot(str(screenshot_path))
+        
         if "anmelden" in webdriver.current_url:
+            log.error("Still on login page after submission")
             raise RuntimeError("Failed to login, check your login credentials.")
 
-        WebDriverWait(webdriver, Delay.medium).until(EC.presence_of_element_located((By.CLASS_NAME, "page-section-header")))
+        WebDriverWait(webdriver, Delay.medium).until(
+            EC.presence_of_element_located((By.CLASS_NAME, "page-section-header"))
+        )
+        
     except Exception as e:
         log.error(f"Login failed: {e}")
+        screenshot_path = screenshots_dir / "zeit_login_failure.png"
+        webdriver.save_screenshot(str(screenshot_path))
         raise
 
 
