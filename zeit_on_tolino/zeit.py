@@ -36,22 +36,34 @@ def _get_credentials() -> Tuple[str, str]:
 
 
 def _login(webdriver: WebDriver) -> None:
-    username, password = _get_credentials()
-    webdriver.get(ZEIT_LOGIN_URL)
+    try:
+        username, password = _get_credentials()
+        log.info(f"ZEIT_PREMIUM_USER is {'set' if username else 'not set'}")
+        log.info(f"ZEIT_PREMIUM_PASSWORD is {'set' if password else 'not set'}")
+        
+        # Take screenshot before navigation
+        screenshots_dir = Path(os.getenv('GITHUB_WORKSPACE', '.')) / "screenshots"
+        screenshots_dir.mkdir(exist_ok=True)
+        
+        webdriver.get(ZEIT_LOGIN_URL)
+        time.sleep(Delay.small)
 
-    username_field = webdriver.find_element(By.ID, "login_email")
-    username_field.send_keys(username)
-    password_field = webdriver.find_element(By.ID, "login_pass")
-    password_field.send_keys(password)
+        username_field = webdriver.find_element(By.ID, "login_email")
+        username_field.send_keys(username)
+        password_field = webdriver.find_element(By.ID, "login_pass")
+        password_field.send_keys(password)
 
-    btn = webdriver.find_element(By.CLASS_NAME, "submit-button.log")
-    btn.click()
-    time.sleep(Delay.small)
+        btn = webdriver.find_element(By.CLASS_NAME, "submit-button.log")
+        btn.click()
+        time.sleep(Delay.medium)
 
-    if "anmelden" in webdriver.current_url:
-        raise RuntimeError("Failed to login, check your login credentials.")
+        if "anmelden" in webdriver.current_url:
+            raise RuntimeError("Failed to login, check your login credentials.")
 
-    WebDriverWait(webdriver, Delay.medium).until(EC.presence_of_element_located((By.CLASS_NAME, "page-section-header")))
+        WebDriverWait(webdriver, Delay.medium).until(EC.presence_of_element_located((By.CLASS_NAME, "page-section-header")))
+    except Exception as e:
+        log.error(f"Login failed: {e}")
+        raise
 
 
 def _get_latest_downloaded_file_path(download_dir: str) -> Path:
