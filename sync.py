@@ -3,6 +3,7 @@ from zeit_on_tolino import env_vars, epub, tolino, web, zeit
 import undetected_chromedriver as uc
 from pathlib import Path
 import sys
+import time
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -10,8 +11,6 @@ log = logging.getLogger(__name__)
 def setup_webdriver():
     options = uc.ChromeOptions()
     options.add_argument('--no-sandbox')
-    # Remove headless mode for now
-    # options.add_argument('--headless')
     options.add_argument('--disable-gpu')
     options.add_argument('--window-size=1920,1080')
     options.add_argument('--disable-dev-shm-usage')
@@ -26,26 +25,16 @@ def setup_webdriver():
     if sys.platform == "darwin":  # Mac OS
         options.binary_location = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
     
-    # Add realistic user agent
-    options.add_argument('--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36')
-    
     # Add language preferences
     options.add_argument('--lang=de-DE')
     
     # Set download directory
     download_path = Path("downloads")
     download_path.mkdir(exist_ok=True)
-    prefs = {
-        "download.default_directory": str(download_path.absolute()),
-        "download.prompt_for_download": False,
-        "download.directory_upgrade": True,
-    }
-    options.add_experimental_option("prefs", prefs)
     
     driver = uc.Chrome(
         options=options,
         version_main=133,  # Match your Chrome version
-        allow_browser_download=True
     )
     
     # Add download_dir_path attribute
@@ -73,9 +62,31 @@ if __name__ == "__main__":
             # upload to tolino cloud
             log.info("upload ZEIT e-paper to tolino cloud...")
             tolino.login_and_upload(webdriver, e_paper_path, e_paper_title)
-        finally:
+            
+            # Keep the browser window open and give instructions
+            log.info("\n=== Browser will stay open for inspection ===")
+            log.info("1. Press F12 to open DevTools")
+            log.info("2. Go to the Network tab")
+            log.info("3. Look for requests to webreader.mytolino.com")
+            log.info("4. Press Ctrl+C when done to close the browser\n")
+            
+            # Keep the session alive by refreshing every 30 seconds
+            try:
+                current_url = webdriver.current_url
+                while True:
+                    time.sleep(30)
+                    webdriver.get(current_url)  # Refresh the page
+                    log.info("Refreshed page to keep session alive...")
+            except KeyboardInterrupt:
+                log.info("\nReceived keyboard interrupt. Closing browser...")
+                webdriver.quit()
+                
+        except Exception as e:
+            log.error(f"An error occurred: {e}", exc_info=True)
+            log.info("\nBrowser will stay open for 30 seconds for inspection...")
+            time.sleep(30)  # Keep window open for 30 seconds on error
             webdriver.quit()
-            log.info("WebDriver quit successfully.")
+            raise
         
         log.info("done.")
     except Exception as e:
